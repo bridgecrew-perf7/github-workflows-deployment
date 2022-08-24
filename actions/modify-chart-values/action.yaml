@@ -1,5 +1,5 @@
-name: "Modify Chart Values"
-description: "Modify Helm Chart values.yaml file"
+name: "Modify chart values"
+description: "Modify Helm chart values.yaml file"
 inputs:
   chart-path:
     description: "Path to chart directory"
@@ -9,4 +9,4 @@ inputs:
     required: false
 runs:
   using: "node16"
-  main: "../lib/modify-chart-values-action/index.js"
+  main: "../lib/modify-chart-values/index.js"

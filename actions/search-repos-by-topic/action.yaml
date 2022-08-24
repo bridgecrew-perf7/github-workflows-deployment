@@ -1,0 +1,21 @@
+name: "Search repos by topic"
+description: "Search repos by topic"
+
+inputs:
+  topic:
+    description: "Topic in which repositories will be searched"
+    required: true
+  org:
+    description: "Github org in which repositories will be searched"
+    required: true
+  token:
+    description: "Personal access token (PAT) used to fetch the repositories"
+    required: true
+
+outputs:
+  result:
+    description: "Result of performed search"
+
+runs:
+  using: "node16"
+  main: "../lib/search-repos-by-topic/index.js"

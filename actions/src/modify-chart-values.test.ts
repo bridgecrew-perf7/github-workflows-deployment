@@ -1,9 +1,13 @@
 import test from "ava";
 import * as fs from "fs/promises";
 import * as path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-import { setSuspendedState } from "./modify-chart-values";
-import * as util from "./util";
+import { setSuspendedState } from "./modify-chart-values.js";
+import * as util from "./utils.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 test("resumeApplication", async (t) => {
   await util.withTmpDir(async (tmpDir) => {

@@ -1,0 +1,59 @@
+name: "Suspend unused stagings"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "5 4 * * *"
+
+defaults:
+  run:
+    shell: "bash"
+
+jobs:
+  prepare:
+    name: "Prepare"
+    runs-on: "ubuntu-22.04"
+    outputs:
+      suspendable-infra-repositories: "${{ steps.find-suspendable-repos.outputs.result }}"
+
+    steps:
+      - name: "Find suspendable repos"
+        id: "find-suspendable-repos"
+        uses: "rtbhouse-apps/github-workflows-deployment/actions/search-repos-by-topic@v0"
+        with:
+          topic: "suspendable"
+          org: "rtbhouse-apps"
+          token: "${{ secrets.GH_PAT }}"
+
+  suspend-stagings:
+    name: "Suspend stagings"
+    runs-on: "ubuntu-22.04"
+    needs: ["prepare"]
+
+    strategy:
+      matrix:
+        repository: "${{ fromJson(needs.prepare.outputs.suspendable-infra-repositories) }}"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+        with:
+          repository: "${{ matrix.repository }}"
+          token: "${{ secrets.GH_PAT }}"
+
+      - name: "Suspend stagings"
+        uses: "rtbhouse-apps/github-workflows-deployment/actions/suspend-unused-stagings@v0"
+        with:
+          token: "${{ secrets.GH_PAT }}"
+
+      - name: "Commit and push changes"
+        run: |
+          if git diff --quiet --exit-code; then
+            echo "::notice::Nothing to commit"
+          else
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git commit -m "ops: suspend unused stagings"
+            git push
+          fi

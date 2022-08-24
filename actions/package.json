@@ -3,39 +3,48 @@
   "version": "0.1.0",
   "private": true,
   "description": "Collection of actions useful for apps deployment",
+  "type": "module",
   "scripts": {
-    "build:modify-chart-values": "ncc build -s --no-source-map-register src/modify-chart-values-action.ts -o lib/modify-chart-values-action",
-    "build": "concurrently 'npm:build:modify-chart-values'",
+    "build:modify-chart-values": "ncc build -s --no-source-map-register src/modify-chart-values-action.ts -o lib/modify-chart-values",
+    "build:search-repos-by-topic": "ncc build -s --no-source-map-register src/search-repos-by-topic-action.ts -o lib/search-repos-by-topic",
+    "build:suspend-unused-stagings": "ncc build -s --no-source-map-register src/suspend-unused-stagings-action.ts -o lib/suspend-unused-stagings",
+    "build": "concurrently 'npm:build:modify-chart-values' 'npm:build:search-repos-by-topic' 'npm:build:suspend-unused-stagings'",
     "test": "ava src/**.test.ts --serial --verbose",
+    "test-l": "ava src/suspend-unused-stagings.test.ts --serial --verbose",
     "lint": "tsc && eslint 'src' --max-warnings 0",
     "lint-fix": "eslint --fix 'src'"
   },
   "dependencies": {
-    "@actions/core": "1.9.1",
-    "del": "7.0.0",
-    "yaml": "2.1.1"
+    "@actions/core": "^1.9.1",
+    "@actions/github": "^5.0.3",
+    "del": "^7.0.0",
+    "fast-memoize": "^2.5.2",
+    "globby": "^13.1.2",
+    "lodash.clonedeep": "^4.5.0",
+    "yaml": "^2.1.1"
   },
   "devDependencies": {
     "@ava/typescript": "^3.0.1",
-    "@trivago/prettier-plugin-sort-imports": "3.3.0",
+    "@trivago/prettier-plugin-sort-imports": "^3.3.0",
+    "@types/lodash.clonedeep": "^4.5.7",
     "@types/node": "^17.0.35",
-    "@typescript-eslint/eslint-plugin": "5.33.1",
-    "@typescript-eslint/parser": "5.33.1",
-    "@vercel/ncc": "0.34.0",
-    "ava": "4.3.1",
-    "concurrently": "7.3.0",
-    "eslint": "8.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "@vercel/ncc": "^0.34.0",
+    "ava": "^4.3.1",
+    "concurrently": "^7.3.0",
+    "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "4.2.1",
-    "ts-node": "10.9.1",
-    "typescript": "4.7.4"
+    "eslint-plugin-prettier": "^4.2.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
   },
   "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--loader=ts-node/esm"
     ]
   },
   "eslintConfig": {

@@ -1,0 +1,9 @@
+name: "Suspends unused stagings"
+description: "Suspends unused staging environments"
+inputs:
+  token:
+    description: "Personal access token (PAT) used to fetch the repositories"
+    required: true
+runs:
+  using: "node16"
+  main: "../lib/suspend-unused-stagings/index.js"

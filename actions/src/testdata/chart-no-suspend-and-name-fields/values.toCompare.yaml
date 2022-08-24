@@ -16,6 +16,7 @@ app:
     service:
       fullnameOverride: service-stats
       appCodeRef: refs/heads/master
+      appCodeCommit: ""
       image:
         repository: rtbhouse-apps/docker-apps/service-stats
         tag: master

@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 
-import { setSuspendedState } from "./modify-chart-values";
+import { setSuspendedState } from "./modify-chart-values.js";
 
 async function run() {
   const chartPath = core.getInput("chart-path", { required: true });
